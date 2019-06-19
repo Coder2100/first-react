@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types'
-import Todos from './Todos';
+//import Todos from './Todos';
 
 export class TodoItem extends Component {
     /**
@@ -19,7 +19,7 @@ export class TodoItem extends Component {
 // tenary operator instead
 getStyle = () => {
     return{
-        backgroundColor: 'lightgrey',
+        background: '#f4f4f4',
         padding: '10px',
         borderBottom: '1px #ccc dotted',
         textDecoration: this.props.todo.completed ?
@@ -36,20 +36,38 @@ markComplete = (event) =>{
         return (
             <div style={this.getStyle()}>
                 <p>
-                <input type="checkbox" onChange={this.props.markComplete} /> {' '}
-                  
-                {this.props.todo.title}</p>
+                <input type="checkbox" onChange={this.props.markComplete.bind(this.id)} /> {' '}
+                {title}
+                  <button onClick={this.props.delTodo.bind(this, id)} style={btnStyle}>X</button>
+                </p>
             </div>
-        )
+        );
     }
 }
-// creating style variable
+// PropTypes
+TodoItem.propTypes = {
+    todo: PropTypes.object.isRequired,
+    markComplete: PropTypes.object.isRequired,
+    delTodo:PropTypes.func.isRequired,
+}
+/** creating style variable
 const itemStyle = {
     backgroundColor: 'lightgrey'
     // use as style={itemStyle}
 }
+ */
 //Proptypes
 TodoItem.propTypes = {
     todo:PropTypes.object.isRequired
+}
+
+const btnStyle = {
+    background: '#ff0000',
+    color: '#fff',
+    border: 'none',
+    padding: '5px 9px',
+    borderRadius: '50%',
+    cursor: 'pointer',
+    float: 'right'
 }
 export default TodoItem
