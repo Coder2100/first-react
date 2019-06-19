@@ -4,13 +4,13 @@ import {Link} from 'react-router-dom';
 function Header(){
     return(
         <header style={headerStyle}>
-            <h1>TodoList</h1>
-            <Link style={linkStyle} to="/">Home</Link>|<Link style={linkStyle} to="/about">About</Link>
+            <h1>Daily Tasks</h1>
+            <Link style={linkStyle} to="/">Work</Link> |  <Link style={linkStyle} to="/about">House Chores</Link> | <Link style={linkStyle} to="/services">Services</Link>
         </header>
     );
 }
 const headerStyle = {
-    backgroundColor: '#333',
+    backgroundColor: 'MediumSeaGreen',
     color: '#fff',
     textAlign: 'center',
     padding: '10px'

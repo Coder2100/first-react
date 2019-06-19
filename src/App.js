@@ -1,94 +1,70 @@
-import React from 'react';
-import {BrowserRouter as Router, Route } from 'react-router-dom';
-import Todos from './components/Todos';
+import React, { Component } from 'react';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Header from './components/layout/Header';
+import Todos from './components/Todos';
 import AddTodo from './components/AddTodo';
 import About from './components/pages/About';
+import Services from './components/pages/Services';
+// import uuid from 'uuid';
 import axios from 'axios';
-
 
 import './App.css';
 
-
-class App extends React.Component{
-
+class App extends Component {
   state = {
     todos: []
   }
-  componentDidMount(){
-    axios.get('https://jsonplaceholder.typicode.com/todos?_limit=10').then(res => this.setState({todos: res.data}))
+
+  componentDidMount() {
+    axios.get('https://jsonplaceholder.typicode.com/todos?_limit=10')
+      .then(res => this.setState({ todos: res.data }))
   }
-  //using axios
-  /**
-  state = {
-    todos: [
-        {
-            id: 1,
-            title: 'sex',
-            completed: false
-        },
 
-        {
-            id: 2,
-            title: 'giving blow job',
-            completed: true
-        },
+  // Toggle Complete
+  markComplete = (id) => {
+    this.setState({ todos: this.state.todos.map(todo => {
+      if(todo.id === id) {
+        todo.completed = !todo.completed
+      }
+      return todo;
+    }) });
+  }
 
-        {
-            id: 3,
-            title: 'cock suckin bitch',
-            completed: false
-        }
-    ]
-}
+  // Delete Todo
+  delTodo = (id) => {
+    axios.delete(`https://jsonplaceholder.typicode.com/todos/${id}`)
+      .then(res => this.setState({ todos: [...this.state.todos.filter(todo => todo.id !== id)] }));
+  }
 
- */
-markComplete = (id) => {
-  //console.log('from app.js')
-  this.setState({ todos: this.state.todos.map(todo => {
-    if(todo.id === id) {
-      todo.completed = !todo.completed
-    }
-    return todo;
-  }) });
-}
+  // Add Todo
+  addTodo = (title) => {
+    axios.post('https://jsonplaceholder.typicode.com/todos', {
+      title,
+      completed: false
+    })
+      .then(res => this.setState({ todos: [...this.state.todos, res.data] }));
+  }
 
-// create function to delete items
-delTodo = (id) => {
-  axios.delete(`https://jsonplaceholder.typicode.com/todos/${id}`)
-    .then(res => this.setState({ todos: [...this.state.todos.filter(todo => todo.id !== id)] }));
-}
-
-// create addTodo function
-addTodo = (title) => {
-  axios.post('https://jsonplaceholder.typicode.com/todos', {
-    title,
-    completed: false
-  })
-    .then(res => this.setState({ todos: [...this.state.todos, res.data] }));
-}
-  render(){
-   // console.log(this.state.todos)
-    return(
+  render() {
+    return (
       <Router>
-      <div className="App">
-        <div className="container">
-          <Header />
-          <Route exact path="/" render={props => (
-            <React.Fragment>
-              <AddTodo addTodo={this.addTodo} />
-              <Todos todos={this.state.todos} markComplete={this.markComplete} delTodo={this.delTodo} />
-            </React.Fragment>
-          )} />
-          <Route path="/about" component={About} />
-        </div>  
-      </div>
-    </Router>
+        <div className="App">
+          <div className="container">
+            <Header />
+            <Route exact path="/" render={props => (
+              <React.Fragment>
+                <Todos todos={this.state.todos} markComplete={this.markComplete} delTodo={this.delTodo} />
+                <br/>
+                <AddTodo addTodo={this.addTodo} />
+              </React.Fragment>
+            )} />
+            <Route path="/about" component={About} />
+            < Route path="/services" component={Services}/>
+          </div>  
+        </div>
+      </Router>
     );
   }
 }
 
-
 export default App;
-
-
